@@ -1,0 +1,73 @@
+/* ─── Design Tokens ────────────────────────────────────────────────────────── */
+/* Drop these into your main.css / App.vue <style> block                        */
+
+/* ─── Base (always present) ─────────────────────────────────────────────────── */
+:root {
+  --font-display: "SF Pro Rounded", ui-rounded, "Helvetica Neue", Arial, sans-serif;
+  --font-body:    -apple-system, BlinkMacSystemFont, "SF Pro Text",    "Helvetica Neue", Arial, sans-serif;
+
+  /* Applied to all color tokens on theme switch */
+  --theme-transition: background-color 0.3s ease, color 0.3s ease,
+                      border-color 0.3s ease;
+}
+
+/* ─── Light theme ───────────────────────────────────────────────────────────── */
+:root,
+[data-theme="light"] {
+  --color-bg:             #f7f5f2;
+  --color-surface:        #ffffff;
+  --color-surface-alt:    #f0ede8;
+  --color-border:         #e4dfd8;
+  --color-accent:         #c0622a;
+  --color-text:           #1c1713;
+  --color-text-secondary: #4a4440;
+  --color-text-muted:     #8a8480;
+}
+
+/* ─── Dark theme ────────────────────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --color-bg:             #16130f;
+  --color-surface:        #201c17;
+  --color-surface-alt:    #2a2520;
+  --color-border:         #38312a;
+  --color-accent:         #e07a46;
+  --color-text:           #f0ece6;
+  --color-text-secondary: #c4bdb5;
+  --color-text-muted:     #7a7068;
+}
+
+/* ─── System preference fallback (when no data-theme is set yet) ────────────── */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --color-bg:             #16130f;
+    --color-surface:        #201c17;
+    --color-surface-alt:    #2a2520;
+    --color-border:         #38312a;
+    --color-accent:         #e07a46;
+    --color-text:           #f0ece6;
+    --color-text-secondary: #c4bdb5;
+    --color-text-muted:     #7a7068;
+  }
+}
+
+/* ─── Smooth transitions on theme switch ────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  transition: var(--theme-transition);
+}
+
+/* Opt-out for elements that should not animate */
+img,
+iframe,
+video {
+  transition: none;
+}
+
+/* ─── Shared Card Style ─────────────────────────────────────────────────────── */
+.card {
+  background: var(--color-surface);
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid var(--color-border);
+}
