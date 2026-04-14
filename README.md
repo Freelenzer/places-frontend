@@ -1,6 +1,10 @@
-# BucketList CMS
+# Places Frontend
 
-A Vue 3 + Vite admin interface for managing POIs and collections.
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-blue?style=for-the-badge)](https://freelenzer.github.io/places-frontend/)
+
+[![Places app screenshot](docs/preview.png)](https://freelenzer.github.io/places-frontend/)
+
+A Vue 3 + Vite admin interface for exploring POIs and collections.
 
 ## Local development
 
@@ -42,26 +46,10 @@ npm run preview  # Serve the dist/ build locally
 
 Pushes to `main` that change files under `Web/bucketlist-cms/` automatically trigger the GitHub Actions workflow [deploy-cms.yml](../../.github/workflows/deploy-cms.yml). It SSHes into the server, pulls the latest code, and rebuilds the `cms` Docker container with the secrets injected as build args.
 
-### One-time server setup
-
-**1. Generate a deploy SSH key** (no passphrase):
-```bash
-ssh-keygen -t ed25519 -f ~/.ssh/bucketlist_deploy -C "github-actions"
-```
-
-**2. Add the public key to the server:**
-```bash
-cat ~/.ssh/bucketlist_deploy.pub | ssh user@your-server "cat >> ~/.ssh/authorized_keys"
-```
-
 **3. Add these secrets** in the GitHub repo under Settings → Secrets and variables → Actions:
 
 | Secret | Description |
 |---|---|
-| `SSH_PRIVATE_KEY` | Contents of `~/.ssh/bucketlist_deploy` |
-| `SSH_HOST` | Server IP or hostname |
-| `SSH_USER` | SSH username on the server |
-| `SSH_DEPLOY_PATH` | Absolute path to the repo on the server (e.g. `/opt/bucketlist`) |
 | `VITE_API_HOST` | Backend URL (e.g. `http://your-server:8080`) |
 | `VITE_UNSPLASH_CLIENT_ID` | Unsplash API key |
 | `VITE_MAPKIT_TOKEN` | MapKit JS JWT |
