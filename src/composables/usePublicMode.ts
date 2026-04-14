@@ -5,7 +5,7 @@ const isPublic = ref(false);
 
 export async function initPublicMode(): Promise<void> {
   try {
-    const res = await fetch(`${import.meta.env.BASE_URL}config.json`);
+    const res = await fetch("/config.json");
     if (res.ok) {
       const config = await res.json();
       isPublic.value = config.publicMode === true;
