@@ -2,18 +2,6 @@
   <div class="poi-meta card">
     <div class="meta-header">
       <h2 class="section-label">Details</h2>
-      <div v-if="!isPublic" class="meta-actions">
-        <button class="action-btn" title="Edit details" @click="$emit('edit')">✎</button>
-        <button
-          class="action-btn sync-btn"
-          :class="{ syncing, done }"
-          :disabled="syncing"
-          :title="done ? 'Done' : 'Trigger automatic data parsing'"
-          @click="triggerUpdate"
-        >
-          <span class="sync-icon">{{ done ? '✓' : '↻' }}</span>
-        </button>
-      </div>
     </div>
     <ul class="meta-list">
       <li class="meta-item">
@@ -91,10 +79,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { triggerPOIUpdate } from "../../network_service.ts";
+import { computed } from "vue";
 import { POI_TYPE_LABELS } from "../../utils/poiTypes";
-import { usePublicMode } from "../../composables/usePublicMode";
 
 const props = defineProps<{
   poi: {
@@ -110,10 +96,6 @@ const props = defineProps<{
     officialWebsite?: string;
   };
 }>();
-
-defineEmits<{ edit: [] }>();
-
-const { isPublic } = usePublicMode();
 
 const poiTypeLabel = computed(
   () => (props.poi.poiType != null && POI_TYPE_LABELS[props.poi.poiType]) || null
@@ -131,21 +113,6 @@ const hasExternalLinks = computed(
     || props.poi.appleMapsId || props.poi.tripadvisorId
 );
 
-const syncing = ref(false);
-const done = ref(false);
-
-async function triggerUpdate() {
-  if (!props.poi.id) return;
-  syncing.value = true;
-  done.value = false;
-  try {
-    await triggerPOIUpdate(String(props.poi.id));
-    done.value = true;
-    setTimeout(() => { done.value = false; }, 3000);
-  } finally {
-    syncing.value = false;
-  }
-}
 </script>
 
 <style scoped>
@@ -231,55 +198,4 @@ async function triggerUpdate() {
   color: #fff;
 }
 
-/* ── Header actions ────────────────────────────────────────────────────────── */
-.meta-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.action-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  background: var(--color-surface-alt);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
-  flex-shrink: 0;
-}
-
-.action-btn:hover {
-  background: var(--color-surface);
-  border-color: var(--color-accent);
-}
-
-.action-btn:disabled {
-  cursor: default;
-}
-
-.sync-icon {
-  font-size: 0.85rem;
-  color: var(--color-text-secondary);
-  display: inline-block;
-}
-
-.sync-btn.syncing .sync-icon {
-  animation: spin 0.9s linear infinite;
-}
-
-.sync-btn.done {
-  border-color: var(--color-accent);
-}
-
-.sync-btn.done .sync-icon {
-  color: var(--color-accent);
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
 </style>

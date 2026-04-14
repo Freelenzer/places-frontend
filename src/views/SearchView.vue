@@ -5,12 +5,9 @@
     <header class="top-bar">
       <span class="app-wordmark">Places</span>
       <div class="top-bar-actions">
-        <button v-if="!isPublic" class="create-btn" aria-label="Create new place" @click="showCreate = true">+</button>
         <ThemeToggle />
       </div>
     </header>
-
-    <CreatePOIDialog v-if="!isPublic" :open="showCreate" :initial-query="showCreate ? lastQuery : undefined" @cancel="showCreate = false" @created="showCreate = false" />
 
     <!-- ── Hero / Search section ────────────────────────────────────────────── -->
     <section class="hero-section">
@@ -83,7 +80,6 @@
       <div v-else class="empty-state">
         <span class="empty-icon">🔍</span>
         <p>Try a different search term or check your spelling.</p>
-        <button v-if="!isPublic" class="create-place-btn" @click="showCreate = true">+ Create "{{ lastQuery }}"</button>
       </div>
 
       <!-- Pagination -->
@@ -145,19 +141,13 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { getPOIs, searchCollections } from "../network_service.ts";
 import { useTheme } from "../composables/useTheme";
-import { usePublicMode } from "../composables/usePublicMode";
-
 import ThemeToggle from "../components/ui/ThemeToggle.vue";
 import SearchBar from "../components/ui/SearchBar.vue";
 import POICard from "../components/poi/POICard.vue";
 import CollectionCard from "../components/collection/CollectionCard.vue";
 import ErrorState from "../components/ui/ErrorState.vue";
-import CreatePOIDialog from "../components/dialogs/CreatePOIDialog.vue";
 
 useTheme();
-const { isPublic } = usePublicMode();
-
-const showCreate = ref(false);
 
 const route = useRoute();
 const router = useRouter();
@@ -275,31 +265,6 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-}
-
-.create-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1.5px solid var(--color-border);
-  background: var(--color-surface);
-  color: var(--color-accent);
-  font-size: 1.35rem;
-  line-height: 1;
-  font-weight: 300;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.18s, border-color 0.18s, transform 0.15s, box-shadow 0.18s;
-}
-
-.create-btn:hover {
-  background: var(--color-accent);
-  border-color: var(--color-accent);
-  color: #fff;
-  transform: rotate(90deg) scale(1.08);
-  box-shadow: 0 4px 16px color-mix(in srgb, var(--color-accent) 35%, transparent);
 }
 
 /* ── Hero ─────────────────────────────────────────────────────────────────── */
@@ -481,25 +446,6 @@ onMounted(() => {
 
 .empty-icon {
   font-size: 2.5rem;
-}
-
-.create-place-btn {
-  margin-top: 0.25rem;
-  background: none;
-  border: 1.5px solid var(--color-border);
-  border-radius: 999px;
-  padding: 0.45rem 1.1rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--color-accent);
-  cursor: pointer;
-  transition: background 0.18s, border-color 0.18s, transform 0.15s;
-}
-
-.create-place-btn:hover {
-  background: color-mix(in srgb, var(--color-accent) 8%, transparent);
-  border-color: var(--color-accent);
-  transform: translateY(-1px);
 }
 
 /* ── Pagination ───────────────────────────────────────────────────────────── */

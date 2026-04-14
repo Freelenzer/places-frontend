@@ -27,7 +27,6 @@
         <section class="places-section">
           <div class="section-header">
             <h2 class="section-label">Places</h2>
-            <button v-if="!isPublic" class="edit-link" @click="placesEditorOpen = true">✏️ Edit</button>
           </div>
 
           <CollectionMap v-if="pois.length" :pois="pois" />
@@ -39,18 +38,6 @@
               class="place-card-wrapper"
             >
               <POICard :poi="effectivePoi(entry)" />
-              <button
-                v-if="!isPublic"
-                class="place-edit-btn place-edit-btn--text"
-                title="Edit collection-specific text"
-                @click="editingEntry = entry; placeTranslationOpen = true"
-              >✏️</button>
-              <button
-                v-if="!isPublic"
-                class="place-edit-btn place-edit-btn--image"
-                title="Change image"
-                @click="editingEntry = entry; poiImagePickerOpen = true"
-              >🖼️</button>
             </div>
           </div>
           <p v-else class="empty-label">No places in this collection.</p>
@@ -114,7 +101,6 @@
 import { ref, computed, watch, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 import { useTheme } from "../composables/useTheme";
-import { usePublicMode } from "../composables/usePublicMode";
 import { getLocalized } from "../utils/localization";
 import { getCollectionBy, patchCollection, patchCollectionPOI } from "../network_service.ts";
 
@@ -130,7 +116,6 @@ import LoadingSpinner from "../components/ui/LoadingSpinner.vue";
 import ErrorState from "../components/ui/ErrorState.vue";
 
 useTheme();
-const { isPublic } = usePublicMode();
 
 const route = useRoute();
 

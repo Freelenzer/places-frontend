@@ -32,12 +32,6 @@
     <div class="hero-content">
       <div class="hero-title-group">
         <h1 class="hero-title">{{ title }}</h1>
-        <button
-          v-if="!isPublic"
-          class="title-edit-btn"
-          aria-label="Edit title"
-          @click="$emit('editTitle')"
-        >✏️</button>
       </div>
 
       <div class="hero-footer">
@@ -50,9 +44,6 @@
         >
           {{ image.author ? `Photo by ${image.author}` : 'View source' }} ↗
         </a>
-        <button v-if="!isPublic" class="edit-btn glass-btn" @click="$emit('editImage')">
-          ✏️ Edit photo
-        </button>
       </div>
     </div>
   </header>
@@ -61,7 +52,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 import ThemeToggle from "../ui/ThemeToggle.vue";
-import { usePublicMode } from "../../composables/usePublicMode";
 
 defineProps<{
   image: {
@@ -75,8 +65,6 @@ defineProps<{
 }>();
 
 defineEmits<{ editImage: []; editTitle: [] }>();
-
-const { isPublic } = usePublicMode();
 
 const scrolled = ref(false);
 function onScroll() { scrolled.value = window.scrollY > 60; }
@@ -173,54 +161,6 @@ onUnmounted(() => window.removeEventListener("scroll", onScroll));
   margin: 0;
 }
 
-/* Hidden by default, shown on hover on pointer devices only */
-.title-edit-btn {
-  flex-shrink: 0;
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.25);
-  backdrop-filter: blur(6px);
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.95rem;
-  padding: 0.3rem 0.45rem;
-  line-height: 1;
-  color: #fff;
-  /* Start invisible, slightly below */
-  opacity: 0;
-  transform: translateY(4px);
-  transition: opacity 0.18s ease, transform 0.18s ease, background 0.15s;
-  /* Touch devices: always visible */
-  display: inline-flex;
-  align-items: center;
-  /* Sit at the bottom of the title baseline */
-  margin-bottom: 0.15rem;
-}
-
-.title-edit-btn:hover {
-  background: rgba(255,255,255,0.28);
-  border-color: rgba(255,255,255,0.5);
-}
-
-/* On pointer devices: hide until the title group is hovered */
-@media (hover: hover) and (pointer: fine) {
-  .title-edit-btn {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-
-  .hero-title-group:hover .title-edit-btn {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* On touch: always show so mobile users can tap it */
-@media (hover: none) {
-  .title-edit-btn {
-    opacity: 1;
-    transform: none;
-  }
-}
 .glass-btn {
   display: inline-flex;
   align-items: center;
@@ -312,20 +252,6 @@ onUnmounted(() => window.removeEventListener("scroll", onScroll));
 }
 
 .image-credit:hover { color: rgba(255,255,255,0.9); }
-
-.edit-btn {
-  background: rgba(255,255,255,0.15);
-  border-color: rgba(255,255,255,0.3);
-  color: #fff;
-  backdrop-filter: blur(8px);
-  /* Never let the button shrink or get pushed off screen */
-  flex-shrink: 0;
-}
-
-.edit-btn:hover {
-  background: rgba(255,255,255,0.28);
-  border-color: rgba(255,255,255,0.6);
-}
 
 @media (max-width: 600px) {
   .poi-hero { height: 240px; }

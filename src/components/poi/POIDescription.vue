@@ -2,7 +2,6 @@
   <article class="poi-description">
     <div class="description-header">
       <h2 class="section-label">About</h2>
-      <button v-if="!isPublic" class="edit-link" @click="$emit('edit')">✏️ Edit</button>
     </div>
 
     <div ref="bodyEl" class="description-body" :class="{ collapsed: isLong && !expanded }">
@@ -20,12 +19,8 @@
 <script setup lang="ts">
 
 import { ref, onMounted } from "vue";
-import { usePublicMode } from "../../composables/usePublicMode";
 
 defineProps<{ text: string }>();
-defineEmits<{ edit: [] }>();
-
-const { isPublic } = usePublicMode();
 
 const COLLAPSE_THRESHOLD = 10; // lines — below this, never collapse
 
@@ -65,22 +60,6 @@ onMounted(() => {
   text-transform: uppercase;
   color: var(--color-accent);
   margin: 0;
-}
-
-.edit-link {
-  background: none;
-  border: none;
-  font-size: 0.78rem;
-  color: var(--color-text-muted);
-  cursor: pointer;
-  padding: 0.2rem 0.5rem;
-  border-radius: 6px;
-  transition: color 0.15s, background 0.15s;
-}
-
-.edit-link:hover {
-  color: var(--color-accent);
-  background: var(--color-surface-alt);
 }
 
 /* ── Collapsible body ──────────────────────────────────────────────────── */
