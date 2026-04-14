@@ -36,7 +36,7 @@ jobs:
           VITE_API_HOST: ${{ secrets.VITE_API_HOST }}
           VITE_UNSPLASH_CLIENT_ID: ${{ secrets.VITE_UNSPLASH_CLIENT_ID }}
           VITE_MAPKIT_TOKEN: ${{ secrets.VITE_MAPKIT_TOKEN }}
-        run: npm run build
+        run: npm run build -- --base=/${{ github.event.repository.name }}/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
