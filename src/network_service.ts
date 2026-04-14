@@ -18,11 +18,11 @@ export type { APIImage };
  * Base options applied to every request against our own API.
  * Change headers, mode, credentials etc. here — one place, all calls inherit it.
  */
-const BASE_OPTIONS: RequestInit = {
-  headers: {
-    "Content-Type": "application/json; charset=UTF-8",
-    "Accept": "application/json",
-  },
+const BASE_OPTIONS: RequestInit = {};
+
+const JSON_HEADERS = {
+  "Content-Type": "application/json; charset=UTF-8",
+  "Accept": "application/json",
 };
 
 /**
@@ -43,7 +43,9 @@ async function apiRequest<T>(
     Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
   }
 
-  const response = await fetch(url.toString(), { ...BASE_OPTIONS, ...options });
+  const hasBody = options.method && options.method !== "GET" && options.method !== "HEAD";
+  const headers = hasBody ? JSON_HEADERS : {};
+  const response = await fetch(url.toString(), { ...BASE_OPTIONS, ...options, headers });
 
   if (!response.ok) {
     const body = await response.text().catch(() => "");
